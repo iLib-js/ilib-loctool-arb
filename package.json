@@ -1,0 +1,54 @@
+{
+  "name": "ilib-loctool-arb",
+  "version": "1.0.0",
+  "description": "Arb type of file handler plugin for Flutter localization",
+  "main": "ArbFileType.js",
+  "scripts": {
+    "test": "node test/testSuite.js",
+    "debug": "node --inspect-brk test/testSuite.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iLib-js/ilib-loctool-arb.git"
+  },
+  "keywords": [
+    "internationalization",
+    "i18n",
+    "localization",
+    "l10n",
+    "globalization",
+    "g11n",
+    "resources",
+    "json",
+    "arb",
+    "translation",
+    "flutter"
+  ],
+  "author": {
+    "name": "Goun Lee",
+    "email": "goun.lee@lge.com"
+  },
+  "contributors": [
+    {
+      "name": "Goun Lee",
+      "email": "goun.lee@lge.com"
+    }
+  ],
+  "files": [
+    "README.md",
+    "LICENSE",
+    "ArbFileType.js",
+    "ArbFile.js"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iLib-js/ilib-loctool-arb/issues"
+  },
+  "homepage": "https://github.com/iLib-js/ilib-loctool-arb#readme",
+  "devDependencies": {
+    "assertextras": "^1.1.0",
+    "loctool": "^2.22.0",
+    "micromatch": "^4.0.5",
+    "nodeunit": "^0.11.3"
+  }
+}
