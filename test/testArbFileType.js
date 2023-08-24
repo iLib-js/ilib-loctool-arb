@@ -58,11 +58,18 @@ module.exports.arbfiletype = {
         test.ok(!arbft.handles("foo.ar"));
         test.done();
     },
-    testArbFileTypeHandlesArbFalse1: function(test) {
+    testArbFileTypeHandlesArbFalse2: function(test) {
         test.expect(2);
         var arbft = new ArbFileType(p);
         test.ok(arbft);
         test.ok(!arbft.handles("messages.json"));
+        test.done();
+    },
+    testArbFileTypeHandlesArbFalse3: function(test) {
+        test.expect(2);
+        var arbft = new ArbFileType(p);
+        test.ok(arbft);
+        test.ok(!arbft.handles("intl.arb"));
         test.done();
     },
 };

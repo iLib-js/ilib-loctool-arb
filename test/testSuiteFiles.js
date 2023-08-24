@@ -17,6 +17,6 @@
  */
 
 module.exports.files = [
-    //"testArbFileType.js",
+    "testArbFileType.js",
     "testArbFile.js",
 ];
