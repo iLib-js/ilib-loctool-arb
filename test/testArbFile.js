@@ -37,7 +37,7 @@ var p = new CustomProject({
     jsonMap: {
         "mappings": {
             "**/intl_messages.arb": {
-                "template": "[dir]/[resourceDir]/[localeDir]/[filename]"
+                "template": "[dir]/[localeDir]/[filename]"
             }
         }
     }

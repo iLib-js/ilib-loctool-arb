@@ -20,7 +20,6 @@
 var fs = require("fs");
 var path = require("path");
 var Utils = require("loctool/lib/utils.js");
-var ResourceString = require("loctool/lib/ResourceString.js");
 var PseudoFactory = require("loctool/lib/PseudoFactory.js");
 
 /**
@@ -221,24 +220,6 @@ ArbFile.prototype._addnewResource = function(text, key, locale) {
     return newres;
 }
 
-ArbFile.prototype._getBaseTranslation = function(locale, translations, tester) {
-    if (!locale) return;
-    var langDefaultLocale = Utils.getBaseLocale(locale);
-    var baseTranslation;
-    if (langDefaultLocale === locale) {
-        langDefaultLocale = 'en-US'; // language default locale need to compare with root data
-    }
-
-    if (locale !== 'en-US') {
-        var hashkey = tester.hashKeyForTranslation(langDefaultLocale);
-        var translated = translations.getClean(hashkey);
-        if (translated) {
-            baseTranslation = translated.target;
-        }
-    }
-    return baseTranslation;
-}
-
 /**
  * Localize the text of the current file to the given locale and return
  * the results.
@@ -276,36 +257,7 @@ ArbFile.prototype.localizeText = function(translations, locale) {
                 output[property] = this.type.pseudos[locale].getString(key);
             } else {
                 if (translated) {
-                    baseTranslation = this._getBaseTranslation(locale, translations, tester);
-                    if (baseTranslation !== translated.target) {
-                        output[property] = translated.target;
-                    }
-                } else if (!translated && this.isloadCommonData){
-                    var comonDataKey = ResourceString.hashKey(this.commonPrjName, locale, tester.getKey(), this.commonPrjType, tester.getFlavor());
-                    translated = translations.getClean(comonDataKey);
-                    if (translated) {
-                        baseTranslation = this._getBaseTranslation(locale, translations, tester);
-                        if (baseTranslation !== translated.target) {
-                            output[property] = translated.target;
-                        }
-                    } else if (!translated && customInheritLocale) {
-                        var hashkey2 = tester.hashKeyForTranslation(customInheritLocale);
-                        var translated2 = translations.getClean(hashkey2);
-                        if (translated2) {
-                            baseTranslation = this._getBaseTranslation(locale, translations, tester);
-                            if (baseTranslation !== translated2.target) {
-                                output[property] = translated2.target;
-                            }
-                        } else {
-                            this.logger.trace("New string found: " + text);
-                            var r  = this._addnewResource(text, key, locale);
-                            this.type.newres.add(r);
-                        }
-                    } else {
-                        this.logger.trace("New string found: " + text);
-                        var r  = this._addnewResource(text, key, locale);
-                        this.type.newres.add(r);
-                    }
+                    output[property] = translated.target;
                 } else if(!translated && customInheritLocale) {
                     var hashkey2 = tester.hashKeyForTranslation(customInheritLocale);
                     var translated2 = translations.getClean(hashkey2);
@@ -347,12 +299,10 @@ ArbFile.prototype.localize = function(translations, locales) {
     for (var i=0; i < locales.length; i++) {
        if (!this.project.isSourceLocale(locales[i])) {
             var translatedOutput = this.localizeText(translations, locales[i]);
-            if (translatedOutput !== "{}") {
-                var pathName = this.getLocalizedPath(locales[i]);
-                var d = path.dirname(pathName);
-                this.API.utils.makeDirs(d);
-                fs.writeFileSync(pathName, translatedOutput, "utf-8");
-            }
+            var pathName = this.getLocalizedPath(locales[i]);
+            var d = path.dirname(pathName);
+            this.API.utils.makeDirs(d);
+            fs.writeFileSync(pathName, translatedOutput, "utf-8");
        }
     }
 };
