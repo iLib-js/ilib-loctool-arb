@@ -216,19 +216,4 @@ ArbFileType.prototype.getExtensions = function() {
     return this.extensions;
 };
 
-/**
-  * Called right before each project is closed
-  * Allows the file type class to do any last-minute clean-up or generate any final files
-  *
-  * Generate manifest file based on created resource files
-  */
-ArbFileType.prototype.projectClose = function() {
-    var resourceRoot = path.join(this.project.root, this.project.getResourceDirs("arb")[0] || "resources");
-    var manifestFile = new ArbFile({
-            project: this.project,
-            type: this
-        });
-    manifestFile.writeManifest(resourceRoot);
-};
-
 module.exports = ArbFileType;

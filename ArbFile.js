@@ -204,6 +204,10 @@ ArbFile.prototype.getfullLocalizedPath = function(locale) {
     return path.join(this.project.target, respath);
 }
 
+ArbFile.prototype._checkEmptyObj = function(obj) {
+    return (Object.keys(obj).length > 0) ? false: true;
+}
+
 ArbFile.prototype._addnewResource = function(text, key, locale) {
     var newres = this.API.newResource({
         resType: "string",
@@ -220,6 +224,24 @@ ArbFile.prototype._addnewResource = function(text, key, locale) {
     return newres;
 }
 
+ArbFile.prototype._getBaseTranslation = function(locale, translations, tester) {
+    if (!locale) return;
+    var langDefaultLocale = Utils.getBaseLocale(locale);
+    var baseTranslation;
+    if (langDefaultLocale === locale) {
+        langDefaultLocale = 'en-US'; // language default locale need to compare with root data
+    }
+
+    if (locale !== 'en-US') {
+        var hashkey = tester.hashKeyForTranslation(langDefaultLocale);
+        var translated = translations.getClean(hashkey);
+        if (translated) {
+            baseTranslation = translated.target;
+        }
+    }
+    return baseTranslation;
+}
+
 /**
  * Localize the text of the current file to the given locale and return
  * the results.
@@ -229,10 +251,10 @@ ArbFile.prototype._addnewResource = function(text, key, locale) {
  * @returns {String} the localized text of this file
  */
 ArbFile.prototype.localizeText = function(translations, locale) {
-    var output = this.parsedData;
+    var output = {};
     var stringifyOuput = "";
-    var baseTranslation;
     var customInheritLocale;
+
     for (var property in this.parsedData) {
         if (property[0] !== '@') {
             var text = this.parsedData[property];
@@ -245,24 +267,24 @@ ArbFile.prototype.localizeText = function(translations, locale) {
                 datatype: this.datatype
             });
             var hashkey = tester.hashKeyForTranslation(locale);
-
-            var translated = translations.getClean(hashkey);
+             var translated = translations.getClean(hashkey);
             customInheritLocale = this.project.getLocaleInherit(locale);
             baseTranslation = key;
-            
             if (!this.project.settings.nopseudo && ((this.project.settings[this.datatype] === undefined) ||
                 (this.project.settings[this.datatype] &&
                 !(this.project.settings[this.datatype].disablePseudo === true))) &&
                 PseudoFactory.isPseudoLocale(locale, this.project)){
+                output = this.parsedData;
                 output[property] = this.type.pseudos[locale].getString(key);
             } else {
                 if (translated) {
+                    if (this._checkEmptyObj(output)) output = this.parsedData;
                     output[property] = translated.target;
                 } else if(!translated && customInheritLocale) {
                     var hashkey2 = tester.hashKeyForTranslation(customInheritLocale);
                     var translated2 = translations.getClean(hashkey2);
                     if (translated2) {
-                        baseTranslation = translated2.target;
+                        if (this._checkEmptyObj(output)) output = this.parsedData;
                         output[property] = translated2.target;
                     } else {
                         this.logger.trace("New string found: " + text);
@@ -270,9 +292,15 @@ ArbFile.prototype.localizeText = function(translations, locale) {
                         this.type.newres.add(r);
                     }
                 } else {
-                    this.logger.trace("New string found: " + text);
-                    var r  = this._addnewResource(text, key, locale);
-                    this.type.newres.add(r);
+                    var baseTranslation = this._getBaseTranslation(locale, translations, tester);
+                    if (baseTranslation && (text !== baseTranslation)) {
+                        if (this._checkEmptyObj(output)) output = this.parsedData;
+                        output[property] = baseTranslation;
+                    } else {
+                        this.logger.trace("New string found: " + text);
+                        var r  = this._addnewResource(text, key, locale);
+                        this.type.newres.add(r);
+                    }
                 }
            }
         }
@@ -299,10 +327,12 @@ ArbFile.prototype.localize = function(translations, locales) {
     for (var i=0; i < locales.length; i++) {
        if (!this.project.isSourceLocale(locales[i])) {
             var translatedOutput = this.localizeText(translations, locales[i]);
-            var pathName = this.getLocalizedPath(locales[i]);
-            var d = path.dirname(pathName);
-            this.API.utils.makeDirs(d);
-            fs.writeFileSync(pathName, translatedOutput, "utf-8");
+            if (translatedOutput !== "{}") {
+                var pathName = this.getLocalizedPath(locales[i]);
+                var d = path.dirname(pathName);
+                this.API.utils.makeDirs(d);
+                fs.writeFileSync(pathName, translatedOutput, "utf-8");
+            }
        }
     }
 };
