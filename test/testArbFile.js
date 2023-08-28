@@ -340,9 +340,9 @@ module.exports.arbfile = {
         '    "@_title": {\n' +
         '        "type": "text",\n' +
         '        "placeholders": {}\n' +
-        '    }\n' +
-        '}'
-      ;
+        '    },\n' +
+        '    "@@locale": "ko"\n' +
+        '}';
         test.equal(actual, expected);
         test.done();
     },
@@ -412,7 +412,8 @@ module.exports.arbfile = {
         '                "example": "Sparky"\n' +
         '            }\n' +
         '        }\n' +
-        '    }\n' +
+        '    },\n' +
+        '    "@@locale": "ko"\n' +
         '}'
         test.equal(actual, expected);
         test.done();
@@ -750,7 +751,8 @@ module.exports.arbfile = {
         '    "@_title": {\n' +
         '        "type": "text",\n' +
         '        "placeholders": {}\n' +
-        '    }\n' +
+        '    },\n' +
+        '    "@@locale": "fr"\n' +
         '}';
         test.equal(actual, expected);
         var actual2 = arbf.localizeText(translations, "fr-CA");
@@ -760,7 +762,8 @@ module.exports.arbfile = {
         '    "@_title": {\n' +
         '        "type": "text",\n' +
         '        "placeholders": {}\n' +
-        '    }\n' +
+        '    },\n' +
+        '    "@@locale": "fr_CA"\n' +
         '}';
         test.equal(actual2, expected2);
 

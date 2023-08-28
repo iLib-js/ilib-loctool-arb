@@ -90,8 +90,6 @@ ArbFileType.prototype.getDefaultMapping = function() {
     return defaultMappings["**/intl_messages.arb"];
 }
 
-var alreadyLoc = new RegExp(/(^|\/)([a-z][a-z])((\/[A-Z][a-z][a-z][a-z])?)(\/([A-Z][A-Z])?)?\//);
-
 /**
  * Return true if the given path is a appinfo.json or qcardinfo.json file and is handled
  * by the current file type.

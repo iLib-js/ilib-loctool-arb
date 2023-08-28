@@ -208,6 +208,11 @@ ArbFile.prototype._checkEmptyObj = function(obj) {
     return (Object.keys(obj).length > 0) ? false: true;
 }
 
+ArbFile.prototype._getLocaleField = function(locale) {
+    var splitLocale = locale.split("-");
+    return Utils.isBaseLocale(locale) ? splitLocale[0] : locale.replace("-", "_");
+}
+
 ArbFile.prototype._addnewResource = function(text, key, locale) {
     var newres = this.API.newResource({
         resType: "string",
@@ -307,6 +312,7 @@ ArbFile.prototype.localizeText = function(translations, locale) {
     }
 
     if (output) {
+        output["@@locale"] = this._getLocaleField(locale);
         stringifyOuput = JSON.stringify(output, true, 4);
     }
 
