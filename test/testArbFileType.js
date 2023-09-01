@@ -72,4 +72,11 @@ module.exports.arbfiletype = {
         test.ok(!arbft.handles("intl.arb"));
         test.done();
     },
+    testArbFileTypeHandlesArbFalse4: function(test) {
+        test.expect(2);
+        var arbft = new ArbFileType(p);
+        test.ok(arbft);
+        test.ok(!arbft.handles("foo/bar/intl_ko.arb"));
+        test.done();
+    }
 };

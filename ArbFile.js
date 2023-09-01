@@ -21,6 +21,7 @@ var fs = require("fs");
 var path = require("path");
 var Utils = require("loctool/lib/utils.js");
 var PseudoFactory = require("loctool/lib/PseudoFactory.js");
+var Locale = require("ilib/lib/Locale");
 
 /**
  * Create a new arb file with the given path name and within
@@ -183,13 +184,13 @@ ArbFile.prototype.write = function() {};
 ArbFile.prototype.getLocalizedPath = function(locale) {
     var mapping = this.mapping || this.type.getMappings(this.pathName || "") || this.type.getDefaultMapping();
     
-    var splitLocale = locale.split("-");
+    var loc = new Locale(locale);
     this.baseLocale = Utils.isBaseLocale(locale);
     var resDir = this.project.getResourceDirs("arb")[0] || ".";
     var lo = locale;
 
     if (this.baseLocale) {
-        lo = splitLocale[0];
+        lo = loc.getLanguage();
     }
     var path = this.API.utils.formatPath(mapping.template, {
         sourcepath: this.pathName,
@@ -209,8 +210,8 @@ ArbFile.prototype._checkEmptyObj = function(obj) {
 }
 
 ArbFile.prototype._getLocaleField = function(locale) {
-    var splitLocale = locale.split("-");
-    return Utils.isBaseLocale(locale) ? splitLocale[0] : locale.replace("-", "_");
+    var loc = new Locale(locale);
+    return Utils.isBaseLocale(locale) ? loc.getLanguage() : loc.getSpec().replace("-", "_");
 }
 
 ArbFile.prototype._addnewResource = function(text, key, locale) {

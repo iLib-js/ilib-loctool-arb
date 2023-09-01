@@ -50,5 +50,8 @@
     "loctool": "^2.22.0",
     "micromatch": "^4.0.5",
     "nodeunit": "^0.11.3"
+  },
+  "dependencies": {
+    "ilib": "^14.18.0"
   }
 }
