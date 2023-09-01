@@ -45,4 +45,4 @@ file for more details.
 
 v1.0.0
 * Implement for [ARB](https://github.com/google/app-resource-bundle/wiki/ApplicationResourceBundleSpecification) file type of localization.
-  *  It localize the `intl_messages.arb` file which is the result of `extract_to_arb.dart` program provided by [intl_translation](https://pub.dev/packages/intl_translation)
+  *  It localizes the `intl_messages.arb` file which is the result of `extract_to_arb.dart` program provided by [intl_translation](https://pub.dev/packages/intl_translation)
