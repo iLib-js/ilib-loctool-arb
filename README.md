@@ -1,21 +1,21 @@
 # ilib-loctool-arb
-An ilib loctool plugin to parse and localize arb files
+An ilib loctool plugin to parse and localize arb files.
 
 ## Configuration
 
-By default, plugin will localize source `intl_messages.arb` file.
-e.g. `/asset/l10n/intl_messages.arb`,  and write localized file
-to a same location with name intl_[locale].arb
+By default, plugin will localize source `intl_messages.arb` file.   
+e.g. `/asset/l10n/intl_messages.arb`, and write localized file
+to a same location with name `intl_[locale].arb`   
 e.g. `/asset/l10n/intl_es.arb`.
 
 
 ## ARB File
 [ARB - Application Resource Bundle](https://github.com/google/app-resource-bundle/wiki/ApplicationResourceBundleSpecification) is a file format for localization basedon JSON with
 the resource entries encoded as JSON object. Each object consists of a resource key with an
-optionsl attribute. ARB files are used to localize apps build with [Flutter](https://flutter.dev/)
+optional attribute. ARB files are used to localize apps build with [Flutter](https://flutter.dev/).
 
 
-###  intl_message.arb file
+###  intl_messages.arb file
 The `intl_messages.arb` file is generated `extract_to_arb.dart` program provided by [intl_translation](https://pub.dev/packages/intl_translation)
 
 Example file:
